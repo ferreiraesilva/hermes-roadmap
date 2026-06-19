@@ -2,7 +2,7 @@
 
 ## Product Catalog and Deployment Matrix
 
-`/config/product-catalog.md` defines official product names. `/config/product-deployments.yaml` independently defines where those products are available. Catalog membership is not deployment approval.
+`/config/product-catalog.md` defines official product names. `/config/product-deployments.yaml` independently defines deployment intent and decisions. Executable validation contracts belong in `hermes-base`, while product behavior belongs in product repositories. Catalog membership is not deployment approval.
 
 Agents must not assume a product is available in the current Hermes installation only because the product exists in `/config/product-catalog.md`.
 
@@ -37,6 +37,8 @@ Before proposing or executing work, an agent must:
 5. Plan and implement product behavior in the appropriate repository.
 6. Validate acceptance criteria and deployment readiness.
 7. Activate the deployment entry only after human acceptance.
+
+Reusable deployment schemas and bootstrap checks belong in `hermes-base`. The actual product capability belongs in its product repository.
 
 ## Examples
 
