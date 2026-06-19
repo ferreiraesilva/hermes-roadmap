@@ -6,7 +6,9 @@ Draft / Confirmed / In Progress / Review / Testing / Done / Won't Fix
 
 ## Product
 
-Hermes Core / TaskMe / WhatsApp Group Personality / Hermes Experiments / Other
+Select one product from `/config/product-catalog.md`.
+
+If no existing product fits, use `Other` temporarily and add an open question asking whether a new product should be added to the catalog.
 
 ## Severity
 
