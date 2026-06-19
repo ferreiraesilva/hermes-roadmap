@@ -97,6 +97,20 @@ If the target installation is unclear, agents must add an open question instead 
 
 If a product should be enabled in a new installation, agents must propose an update to `/config/product-deployments.yaml` and wait for human approval.
 
+## Repository Architecture Rules
+
+Agents must distinguish between roadmap decisions, executable shared infrastructure and product-specific implementation.
+
+* `hermes-roadmap` contains planning, governance, product catalog, installation intent and deployment decisions.
+* `hermes-base` contains reusable executable baseline configuration, schemas, bootstrap rules, automation contracts and shared infrastructure.
+* Product repositories contain product-specific implementation.
+
+Baseline intent may be planned in this repository, but executable baseline infrastructure belongs in `hermes-base`.
+
+Agents must not implement product-specific behavior in `hermes-base`. TaskMe, Multichannel, WhatsApp Group Personality, Investments and other product logic must be redirected to the relevant product repository.
+
+Agents must not assume that a cataloged product is deployed to an installation. They must verify `/config/product-deployments.yaml` and the target installation before proposing or executing product work.
+
 ## How to Choose the Correct Record Type
 
 Use the following rules.

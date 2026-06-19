@@ -153,6 +153,14 @@ The product catalog defines official names; it does not enable products. Agents 
 
 Detailed guidance is available in `/docs/hermes-installation-blueprint.md` and `/docs/product-deployment-model.md`.
 
+## Ecosystem Architecture
+
+`hermes-roadmap` is the planning and governance layer: it defines what should exist and why. `hermes-base` is the executable shared foundation: it defines how Hermes Agent installations are created, configured and operated. Product repositories implement product-specific behavior.
+
+Installation intent and deployment decisions remain here. Reusable schemas, baseline configuration, bootstrap logic and automation contracts belong in `hermes-base`. Product catalog membership never implies deployment.
+
+See `/docs/hermes-ecosystem-architecture.md` and `/docs/hermes-base-platform.md` for the detailed boundaries.
+
 ## Main Directories
 
 ### `/product-vision`

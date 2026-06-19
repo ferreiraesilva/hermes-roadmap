@@ -2,13 +2,13 @@
 
 ## Purpose
 
-This blueprint defines a reusable model for configuring multiple Hermes Agent installations without requiring the human user to configure each instance manually.
+This blueprint defines installation intent and governance for multiple Hermes Agent installations. Reusable executable bootstrap, schemas and baseline infrastructure belong in `hermes-base`.
 
 ## Three-Layer Model
 
 ### 1. Hermes Baseline
 
-The global operating model inherited by every installation. It defines human approval gates, work classification, workflow statuses, agent rules, project fields and governance requirements.
+The global operating model inherited by every installation. `hermes-roadmap` records its intent and governance; `hermes-base` implements its reusable executable contracts.
 
 Every Hermes installation must inherit the Hermes Baseline unless the human explicitly approves an exception.
 
@@ -39,7 +39,8 @@ Deployment configuration contains the product, deployment scope, target installa
 5. Confirm each product's deployment in `/config/product-deployments.yaml`.
 6. Document permissions, channels, repositories and open questions.
 7. Obtain human approval for installation creation and deployment changes.
-8. Add the approved installation to `/config/installations.yaml` and automate provisioning from the declared configuration.
+8. Add the approved installation to `/config/installations.yaml`.
+9. Use the approved contracts in `hermes-base` to validate and bootstrap the installation.
 
 ## Human Approval Requirements
 
@@ -48,6 +49,8 @@ Human approval is required for installation creation, baseline exceptions, produ
 ## Agent Responsibilities
 
 Agents must validate product names and installation IDs against their source files, distinguish baseline work from installation and deployment work, use the provided templates, expose unresolved decisions as open questions and wait for human approval at required gates.
+
+Agents must place executable schemas, bootstrap logic and reusable automation in `hermes-base`, while keeping installation intent and deployment decisions in `hermes-roadmap`.
 
 ## Example Scenarios
 
