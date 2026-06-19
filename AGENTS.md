@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This repository is used to organize the Hermes ecosystem roadmap, product planning, technical decisions, RFCs, epics, user stories, spikes and related documentation.
+This repository is used to organize the Hermes ecosystem roadmap, product planning, technical decisions, RFCs, initiatives, epics, user stories, technical tasks, spikes, bugs and related documentation.
 
-AI agents working in this repository must follow the structure, templates and writing rules defined here.
+AI agents working in this repository must follow the structure, templates, catalog files and writing rules defined here.
 
 The main goal is to keep all records consistent, useful, traceable and ready for human review.
 
@@ -15,6 +15,12 @@ Do not create unstructured planning documents.
 Whenever a new record is needed, choose the correct template from `/templates` and follow it.
 
 If the user provides incomplete information, make reasonable assumptions only when safe and clearly mark them as assumptions or open questions.
+
+## Repository Language
+
+All repository records must be written in English.
+
+The human user may discuss ideas with the AI assistant in any language, but all generated records committed to this repository must be written in English.
 
 ## Repository Scope
 
@@ -29,10 +35,12 @@ It stores:
 * User stories
 * Technical tasks
 * Spikes
+* Bugs
 * RFCs
 * Architecture and product decisions
 * Cross-repository planning
 * Documentation templates
+* Operational catalogs
 
 Implementation may happen in other repositories, such as:
 
@@ -40,6 +48,25 @@ Implementation may happen in other repositories, such as:
 * `hermes-personas-whatsapp`
 * `hermes-experiments`
 * other Hermes-based repositories
+
+## Product Catalog Rule
+
+The file `/config/product-catalog.md` is the single source of truth for product names in this repository.
+
+AI agents must use the product names defined in that file when filling the `Product` field in initiatives, epics, user stories, technical tasks, spikes, bugs, RFCs and decision records.
+
+AI agents must not create product name variations directly inside records.
+
+If the human describes a new product, module or experiment that does not fit the existing catalog, the AI agent must:
+
+1. Use `Other` temporarily if a record must be created immediately.
+2. Add an open question asking whether a new product should be added to `/config/product-catalog.md`.
+3. Propose the exact new product name.
+4. Wait for human approval before treating the new product name as official.
+
+Templates must not hardcode the full product list.
+
+Templates must reference `/config/product-catalog.md` instead.
 
 ## How to Choose the Correct Record Type
 
@@ -132,6 +159,30 @@ Use the template:
 /templates/spike-template.md
 ```
 
+### Bug
+
+Use a Bug when an expected or previously working behavior is incorrect.
+
+Examples:
+
+* Task creation fails for audio messages.
+* Hermes sends a reminder to the wrong person.
+* Group personality is not applied in a WhatsApp group.
+* A scheduled task reminder runs more than once.
+* Contact resolution returns the wrong contact.
+
+Use the template:
+
+```text
+/templates/bug-template.md
+```
+
+Severity describes the actual impact of the bug.
+
+Priority describes how soon the bug should be addressed.
+
+If the cause is unknown, create or link a Spike when investigation is needed.
+
 ### RFC
 
 Use an RFC when the subject is a relevant product, technical or architectural proposal that needs structured discussion before implementation.
@@ -181,12 +232,13 @@ Initiative
 └── Epic
     ├── User Story
     ├── Technical Task
-    └── Spike
+    ├── Spike
+    └── Bug
 ```
 
 Do not create unnecessary hierarchy.
 
-Small items may be created directly as user stories, technical tasks or spikes when no initiative or epic is needed.
+Small items may be created directly as user stories, technical tasks, spikes or bugs when no initiative or epic is needed.
 
 ## Writing Standards
 
@@ -207,6 +259,7 @@ Avoid:
 * Missing acceptance criteria
 * Mixing product decisions with technical implementation without separation
 * Creating documents with empty sections unless the section is explicitly marked as `To be defined`
+* Creating product name variations outside `/config/product-catalog.md`
 
 ## Handling Missing Information
 
@@ -298,6 +351,7 @@ Given [context], when [action], then [expected result].
 Must include:
 
 * Status
+* Product
 * Related Epic or Story
 * Objective
 * Technical Details
@@ -311,6 +365,7 @@ Must include:
 Must include:
 
 * Status
+* Product
 * Related Epic or Initiative
 * Question
 * Context
@@ -322,11 +377,36 @@ Must include:
 * Recommendation
 * Follow-up Issues
 
+### Bug
+
+Must include:
+
+* Status
+* Product
+* Severity
+* Priority
+* Related Area
+* Environment
+* Summary
+* Current Behavior
+* Expected Behavior
+* Steps to Reproduce
+* Evidence
+* Impact
+* Workaround
+* Suspected Cause
+* Proposed Fix
+* Regression Risk
+* Acceptance Criteria
+* Related Issues
+* Notes
+
 ### RFC
 
 Must include:
 
 * Status
+* Product
 * Summary
 * Motivation
 * Scope
@@ -353,18 +433,6 @@ Testing
 Done
 Parked
 Blocked
-```
-
-## Product Values
-
-Use these product values when possible:
-
-```text
-Hermes Core
-TaskMe
-WhatsApp Group Personality
-Hermes Experiments
-Other
 ```
 
 ## Priority Values
@@ -436,6 +504,7 @@ Use clear prefixes:
 [STORY] Create task from audio message
 [TASK] Create task database schema
 [SPIKE] Investigate WhatsApp contact access
+[BUG] Reminder is sent to the wrong assignee
 [RFC] TaskMe MVP
 [DECISION] Use personal GitHub Project
 ```
@@ -447,11 +516,12 @@ When generating GitHub issues, always:
 1. Select the correct type.
 2. Use the correct template.
 3. Fill every relevant section.
-4. Mark missing details as `To be defined` or `Open question`.
-5. Add clear acceptance criteria.
-6. Link to related initiative, epic, RFC or repository when available.
-7. Avoid creating duplicate issues.
-8. Keep the issue focused on one objective.
+4. Select the product from `/config/product-catalog.md`.
+5. Mark missing details as `To be defined` or `Open question`.
+6. Add clear acceptance criteria.
+7. Link to related initiative, epic, RFC or repository when available.
+8. Avoid creating duplicate issues.
+9. Keep the issue focused on one objective.
 
 ## When Updating Existing Records
 
@@ -463,6 +533,7 @@ When updating a document or issue:
 4. Update status only when the user clearly indicates progress.
 5. Add new open questions instead of hiding uncertainty.
 6. If a decision was made, create or update a decision record.
+7. If a new official product is approved, update `/config/product-catalog.md`.
 
 ## When Discussing With the User
 
@@ -476,11 +547,13 @@ The agent should identify whether the conversation is producing:
 * A user story
 * A technical task
 * A spike
+* A bug
 * An RFC
 * A decision
 
 Before generating a record, the agent should organize the information into:
 
+* Product
 * Problem
 * Objective
 * Scope
@@ -496,6 +569,7 @@ A generated record is acceptable only if another person can read it and understa
 
 * What is being proposed
 * Why it matters
+* What product it belongs to
 * What is included
 * What is excluded
 * What depends on Hermes
@@ -511,8 +585,10 @@ When in doubt:
 * Prefer a smaller, well-defined issue over a broad issue.
 * Prefer open questions over invented decisions.
 * Prefer a spike when implementation is unclear.
+* Prefer a bug when expected behavior is broken.
 * Prefer an RFC when a decision has architectural or product impact.
 * Prefer a decision record when a decision has already been made.
+* Prefer updating `/config/product-catalog.md` over spreading new product names across records.
 
 ## Human Approval and Acceptance Rules
 
@@ -549,6 +625,7 @@ The AI agent should then create or update the appropriate record using the corre
 An item may only be considered ready for sprint execution when:
 
 * The correct template has been used.
+* The product was selected from `/config/product-catalog.md`.
 * The scope is clear.
 * Acceptance criteria are defined.
 * Dependencies are identified.
