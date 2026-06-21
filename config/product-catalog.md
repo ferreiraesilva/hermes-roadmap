@@ -34,6 +34,18 @@ Examples:
 - Due date rescheduling
 - Task follow-up workflows
 
+### MinhaIncorporadora
+
+Use for the Hermes-based real estate broker assistant product.
+
+Examples:
+
+- Listing available units and developments
+- Answering questions about pricing and payment options
+- Sending media (floor plans, photos)
+- Escalating to a human broker when needed
+- Multi-tenant configuration per real estate company
+
 ### WhatsApp Group Personality
 
 Use for the Hermes module or product that allows each WhatsApp group to have its own behavior, tone, rules and contextual instructions.

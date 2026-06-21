@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft
+Implemented — v1 shipped, in homologation (`feature/taskme-v1` branch, `ferreiraesilva/TaskMe`)
 
 ## Summary
 
@@ -32,11 +32,18 @@ The goal is to use Hermes as an operational assistant for task assignment and fo
 
 ## Open Questions
 
-- Where will tasks be stored?
-- How will Hermes identify WhatsApp contacts?
-- How will task completion be confirmed?
-- How will due date changes be audited?
+~~- Where will tasks be stored?~~ Postgres (local container, managed by `hermes-infra`)
+~~- How will Hermes identify WhatsApp contacts?~~ Phone number as canonical identity; multi-channel via `channels` table (`0002_channels.sql`)
+~~- How will task completion be confirmed?~~ Assigned person replies; status updated via `taskme_concluir_tarefa` tool
+~~- How will due date changes be audited?~~ `reprogram` service logs reason and new date
 
 ## Acceptance Criteria
 
-To be defined.
+- [x] Task created from text message
+- [x] Assigned person identified by phone number
+- [x] Task sent to assigned person
+- [x] Weekly digest on Mondays
+- [x] Daily digest
+- [x] Due date rescheduling with justification
+- [x] Charge reminders on due date
+- [x] Multi-channel delivery (WhatsApp + Telegram)

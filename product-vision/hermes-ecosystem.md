@@ -6,11 +6,17 @@ Hermes is the base agent platform used to build automation, communication and pr
 
 The Hermes ecosystem includes modules, features and complete products that depend on Hermes to operate.
 
-## Initial Products and Modules
+## Products and Modules
 
-- TaskMe
-- WhatsApp Group Personality
-- Hermes Experiments
+### Shipped (v1 built, in homologation)
+
+- **TaskMe** — task assignment and follow-up via WhatsApp and Telegram. Multi-channel identity, daily digests, charge reminders.
+- **MinhaIncorporadora** — real estate broker assistant. Unit search, pricing, media, human escalation. Multi-tenant per installation.
+
+### Planned
+
+- **WhatsApp Group Personality** — per-group behavior, tone and rules. See RFC-0002.
+- **Hermes Experiments** — proofs of concept and early validations not yet mature enough for a product.
 
 ## Principles
 
@@ -22,4 +28,5 @@ The Hermes ecosystem includes modules, features and complete products that depen
 
 ## Current Status
 
-Initial planning.
+Two products shipped and in homologation (TaskMe, MinhaIncorporadora).
+Infrastructure managed by `hermes-infra` (inventory-driven multi-tenant deployments).
