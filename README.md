@@ -64,12 +64,15 @@ This repository is used for:
 * Release planning
 * Documentation templates
 
-Actual implementation may happen in other repositories, such as:
+Actual implementation happens in dedicated repositories. All Hermes systems use
+the `hermes-*` naming convention and belong to the **Hermes Ecosystem** GitHub
+Project:
 
-* `taskme`
-* `hermes-personas-whatsapp`
-* `hermes-experiments`
-* other Hermes-based modules or products
+* `hermes-taskme` — TaskMe
+* `hermes-minhaincorporadora` — MinhaIncorporadora
+* `hermes-multgrupo` — WhatsApp Group Personality
+* `hermes-infra` — deployment/ops source of truth (inventory, environments, Postgres)
+* future: `hermes-investimentos`, `hermes-governanca`
 
 ## What Belongs Here
 
@@ -310,10 +313,10 @@ Examples:
 
 The Hermes ecosystem should be managed through a GitHub Project connected to this repository and other Hermes-based repositories.
 
-Recommended Project name:
+Project name (in use):
 
 ```text
-Hermes Ecosystem Roadmap
+Hermes Ecosystem
 ```
 
 Recommended views:
@@ -341,11 +344,14 @@ Release
 Owner
 ```
 
-Recommended product values:
+Recommended product values (source of truth: `/config/product-catalog.md`):
 
 ```text
 Hermes Core
 TaskMe
+MinhaIncorporadora
+Investimentos
+Governança
 WhatsApp Group Personality
 Hermes Experiments
 Other
@@ -579,7 +585,10 @@ Given a user sends an audio message with a task request, when Hermes receives th
 
 ## Current Status
 
-This repository is currently in the initial planning phase.
+Two products shipped and in homologation: **TaskMe** and **MinhaIncorporadora**.
+Deployment is managed by `hermes-infra` (inventory-driven; profile = container =
+bot). Naming standard adopted across the ecosystem — see
+`decisions/2026-06-21-hermes-naming-standard.md`.
 
 ## Human-in-the-Loop Delivery Model
 

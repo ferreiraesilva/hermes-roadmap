@@ -46,6 +46,30 @@ Examples:
 - Escalating to a human broker when needed
 - Multi-tenant configuration per real estate company
 
+### Investimentos
+
+Use for the Hermes-based investment assistant product. Typically runs alongside
+the personal assistant in the same profile/bot (shared objective).
+
+Examples:
+
+- Investment profile and goals
+- Portfolio questions and follow-up
+- Group + profile concept (see related roadmap notes)
+
+Scope: To be defined.
+
+### Governança
+
+Use for the Hermes-based governance product. Operates on its own profile/bot.
+
+Examples:
+
+- Governance and compliance workflows
+- Policy follow-up
+
+Scope: To be defined.
+
 ### WhatsApp Group Personality
 
 Use for the Hermes module or product that allows each WhatsApp group to have its own behavior, tone, rules and contextual instructions.

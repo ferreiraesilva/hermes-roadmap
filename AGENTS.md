@@ -42,12 +42,14 @@ It stores:
 * Documentation templates
 * Operational catalogs
 
-Implementation may happen in other repositories, such as:
+Implementation happens in dedicated `hermes-*` repositories, all part of the
+**Hermes Ecosystem** GitHub Project:
 
-* `taskme`
-* `hermes-personas-whatsapp`
-* `hermes-experiments`
-* other Hermes-based repositories
+* `hermes-taskme`
+* `hermes-minhaincorporadora`
+* `hermes-multgrupo`
+* `hermes-infra` (deployment/ops source of truth)
+* future: `hermes-investimentos`, `hermes-governanca`
 
 ## Product Catalog Rule
 
