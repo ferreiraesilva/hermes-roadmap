@@ -586,9 +586,12 @@ Given a user sends an audio message with a task request, when Hermes receives th
 ## Current Status
 
 Two products shipped and in homologation: **TaskMe** and **MinhaIncorporadora**.
-Deployment is managed by `hermes-infra` (inventory-driven; profile = container =
-bot). Naming standard adopted across the ecosystem — see
-`decisions/2026-06-21-hermes-naming-standard.md`.
+For Leonardo's MAC02 HML environment, only the personal TaskMe profile is active
+for now; the Leonardo corretores profile is parked until it is explicitly
+reintroduced. Deployment is managed by `hermes-infra` (inventory-driven; profile
+= container = bot). Naming standard adopted across the ecosystem — see
+`decisions/2026-06-21-hermes-naming-standard.md` and
+`decisions/2026-06-23-personal-hml-only.md`.
 
 ## Human-in-the-Loop Delivery Model
 
