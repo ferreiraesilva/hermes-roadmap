@@ -133,28 +133,44 @@ classified. `importar_json()` validates `schema_version` and returns a batch sum
   (default `/opt/data/files`). External backends (Supabase Storage / S3) are a future
   implementation of the same interface.
 
-### Durability across deploys (volume reuse)
+### Storage volume: a dedicated, separate volume
 
-The container home `/opt/data` is a **host bind mount** (`${HERMES_DATA_DIR}:/opt/data`
-in `platform/hermes/compose.yml`), so it is real host storage, not the container's
-ephemeral layer. Files placed under `/opt/data/files` therefore **survive container
-recreation, `git reset --hard` of `product-src/`, and any redeploy**. To make this a
-guarantee rather than a coincidence:
+The container home `/opt/data` is a host bind mount (`${HERMES_DATA_DIR}:/opt/data`)
+and already persists across deploys. But the home is mostly **deploy-managed,
+rebuildable runtime state** (config, `auth.json`, `plugins/` symlinks, `product-src/`
+git clones, `SOUL.md`, `.env`, whatsapp session). The file repository is the opposite:
+**precious, hard-to-reproduce user content** (originals that may be impossible to
+re-fetch if the developer's source changes). Mixing the two is a lifecycle /
+blast-radius smell.
 
-1. **Storage root is under the persistent volume** (`/opt/data/files`) — never under
-   `product-src/<slug>` (which the deploy git-resets) nor anywhere in the container's
-   writable layer.
-2. **`storage_key` is stored relative** to the storage root, so references keep
-   resolving even if the absolute mount path changes (host migration / new
-   `data_root`).
-3. **The deploy must never wipe the data dir or `files/`.** It is an invariant today
-   (the deploy only touches `plugins/`, `product-src/`, `runtime/whatsapp-bridge`,
-   `.env`, `SOUL.md`, `auth.json`); add `mkdir -p "$DATA_DIR/files"` and keep `files/`
-   out of any `rm -rf`. The `StorageBackend` also creates the dir on first write.
+**Decision: the file repository gets its own dedicated volume**, mounted at
+`/opt/data/files` (so the app path and `MINHAINCORP_STORAGE_ROOT` stay unchanged —
+no storage code change) but backed by an **independent host directory outside
+`$DATA_DIR`**. Docker handles the nested bind mount fine.
 
-Backups (ops) must cover **both** `$DATA_DIR/files` **and** the Postgres database
-together, since the file rows / extractions reference the stored copies; dedup by
-content hash + relative `storage_key` keeps the pair consistent after a restore.
+Why a second volume (beyond plain persistence, which the single mount already gives):
+
+1. Survives not only a redeploy but a **full home reprovision / wipe** of `$DATA_DIR`
+   (rebuild a corrupted profile from scratch without losing files).
+2. **Independent backup / restore / relocation** — back up exactly the files volume
+   (+ DB), not the whole home with its tokens and sessions.
+3. Can live on a **different / bigger disk** and be moved as content grows past a few
+   GB.
+4. Isolates developer content from any future deploy `rm -rf` regression.
+
+Infra changes (hml; same pattern for prd):
+
+- `environments/<env>/environment.json`: add `files_root` (sibling to `data_root`).
+- `scripts/inventory.py`: `plan` exposes `files_dir = <files_root>/<instance>`.
+- `scripts/deploy-instance.sh`: export `HERMES_FILES_DIR="$files_dir"`, `mkdir -p` it
+  with the container uid/gid; never wipe it.
+- `platform/hermes/compose.yml`: add `- ${HERMES_FILES_DIR:?...}:/opt/data/files`.
+
+Still required regardless of backend: `storage_key` is stored **relative** to the
+storage root (portable across path changes); the `StorageBackend` mkdirs on first
+write. Ops backups must cover the **files volume and the Postgres database together**,
+since file rows / extractions reference the stored copies; dedup by content hash +
+relative `storage_key` keeps the pair consistent after a restore.
 - **`SourceAdapter`** (`list(path)`, `fetch(entry)`) — accommodates each developer's
   different folder structure without touching the rest. Implementations:
   `HttpFolderAdapter` (generic), **`FileHubAdapter`** (EBM — `# TODO`: consume the
@@ -240,6 +256,9 @@ tests/     mocked db + in-memory storage + AI stub
 ## Phases (what is done now vs later)
 
 **Phase 1 — foundation, no real AI (implement now):**
+- [ ] `hermes-infra`: dedicated files volume (`files_root` in `environment.json`,
+      `files_dir` in `inventory.py`, `HERMES_FILES_DIR` export + `mkdir` in deploy,
+      `/opt/data/files` mount in `compose.yml`).
 - [ ] Migrations `0003`–`0006`.
 - [ ] `StorageBackend` (localfs) + `SourceAdapter` (http/local; FileHub stub).
 - [ ] `importacao.importar_json` (validated, idempotent upsert).

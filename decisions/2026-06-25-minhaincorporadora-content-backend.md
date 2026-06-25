@@ -17,13 +17,15 @@ structure, and each developer (EBM is the reference) stores content differently.
 Build the content backend as an evolution of the existing plugin, with these locked
 choices:
 
-1. **Storage in-container, on the persistent volume.** Originals are kept under
-   `/opt/data/files/...`, which is a **host bind mount** (`${HERMES_DATA_DIR}:/opt/data`),
-   so they **survive container recreation and any redeploy** (the deploy git-resets
-   only `product-src/`, never `files/`). `storage_key` is stored relative to the
-   storage root so references survive a host/path change. External storage (S3 /
-   Supabase Storage) is deferred behind the same `StorageBackend` abstraction. Ops
-   backups must cover `$DATA_DIR/files` and the database together.
+1. **Storage in-container, on a dedicated volume.** Originals are kept under
+   `/opt/data/files/...`, mounted from a **separate host directory outside `$DATA_DIR`**
+   (`files_root`), not inside the Hermes home. This isolates precious, hard-to-reproduce
+   developer content from the deploy-managed/rebuildable home: files survive not only a
+   redeploy but a full home reprovision, and can be backed up / relocated independently.
+   The mount path stays `/opt/data/files`, so storage code is unchanged. `storage_key`
+   is stored relative to the storage root so references survive a host/path change.
+   External storage (S3 / Supabase Storage) is deferred behind the same `StorageBackend`
+   abstraction. Ops backups must cover the files volume and the database together.
 2. **AI via OpenRouter, per-format specialization.** A `ModelRouter` selects the best
    model per media type and task (images/floor plans → vision/OCR; pdf/doc/ppt →
    native parse + text model; xlsx/csv → native parse; video → ASR + keyframe
