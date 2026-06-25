@@ -47,7 +47,9 @@ Examples:
 - Answering questions about pricing and payment options
 - Sending media (floor plans, photos)
 - Escalating to the broker's Sales Manager when needed
-- Multi-tenant configuration per real estate company
+- Ingesting, classifying and structuring developer content (files, floor plans,
+  price tables) into searchable knowledge (see RFC-0005)
+- One developer per container/bot (physical single-tenant)
 
 ### Investimentos
 
