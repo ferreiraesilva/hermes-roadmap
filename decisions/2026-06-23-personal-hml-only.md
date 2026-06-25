@@ -21,6 +21,7 @@ For now, Leonardo's HML deployment will keep only the personal profile:
 - Active profile: `leonardo/pessoal`.
 - Active container: `hermes-leonardo-pessoal-hml`.
 - Active product: TaskMe.
+- Enabled runtime channels: Telegram and WhatsApp.
 - Removed profile: `leonardo/corretores`.
 - Removed container target: `hermes-leonardo-corretores-hml`.
 
@@ -44,6 +45,9 @@ current phase, only `leonardo/pessoal` has the dashboard enabled.
   do not compete with the GitOps-managed personal container.
 - Dashboard enablement does not create a second Hermes container. It enables the
   dashboard service inside the selected Hermes container.
+- WhatsApp enablement is declared in `hermes-infra` at the profile level. The
+  deploy enables `whatsapp-platform` and writes the required `WHATSAPP_*`
+  runtime variables, but QR pairing remains an operational step.
 - WhatsApp pairing and QR-code scanning should happen from the
   `hermes-leonardo-pessoal-hml` container.
 - MinhaIncorporadora for Leonardo can be reintroduced later as a new explicit
