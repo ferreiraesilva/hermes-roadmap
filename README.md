@@ -591,7 +591,9 @@ for now; the Leonardo corretores profile is parked until it is explicitly
 reintroduced. Deployment is managed by `hermes-infra` (inventory-driven; profile
 = container = bot). Naming standard adopted across the ecosystem — see
 `decisions/2026-06-21-hermes-naming-standard.md` and
-`decisions/2026-06-23-personal-hml-only.md`.
+`decisions/2026-06-23-personal-hml-only.md`. The personal HML Hermes image is
+now configured for daily digest-based updates with rollback; see
+`decisions/2026-06-25-auto-update-hml-hermes-image.md`.
 
 ## Human-in-the-Loop Delivery Model
 
