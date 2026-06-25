@@ -36,14 +36,17 @@ Examples:
 
 ### MinhaIncorporadora
 
-Use for the Hermes-based real estate broker assistant product.
+Use for the Hermes-based Sales Manager's Assistant product. The assistant serves
+the brokers of partner agencies on behalf of a real estate company's Sales Manager
+(Gerente de Vendas); it does not impersonate a broker. See
+`/rfcs/RFC-0003-minhaincorporadora-persona-model-correction.md`.
 
 Examples:
 
 - Listing available units and developments
 - Answering questions about pricing and payment options
 - Sending media (floor plans, photos)
-- Escalating to a human broker when needed
+- Escalating to the broker's Sales Manager when needed
 - Multi-tenant configuration per real estate company
 
 ### Investimentos
