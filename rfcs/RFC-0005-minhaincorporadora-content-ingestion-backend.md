@@ -129,9 +129,32 @@ classified. `importar_json()` validates `schema_version` and returns a batch sum
 - **`StorageBackend`** (`put/get/url/exists`) — default **local filesystem** under
   `/opt/data/files/<incorporadora>/<empreendimento>/...`. Keeps an owned copy of each
   original (stable for WhatsApp delivery) alongside the recorded `source_url`. Config:
-  `MINHAINCORP_STORAGE_BACKEND` (default `localfs`), `MINHAINCORP_STORAGE_ROOT`.
-  External backends (Supabase Storage / S3) are a future implementation of the same
-  interface.
+  `MINHAINCORP_STORAGE_BACKEND` (default `localfs`), `MINHAINCORP_STORAGE_ROOT`
+  (default `/opt/data/files`). External backends (Supabase Storage / S3) are a future
+  implementation of the same interface.
+
+### Durability across deploys (volume reuse)
+
+The container home `/opt/data` is a **host bind mount** (`${HERMES_DATA_DIR}:/opt/data`
+in `platform/hermes/compose.yml`), so it is real host storage, not the container's
+ephemeral layer. Files placed under `/opt/data/files` therefore **survive container
+recreation, `git reset --hard` of `product-src/`, and any redeploy**. To make this a
+guarantee rather than a coincidence:
+
+1. **Storage root is under the persistent volume** (`/opt/data/files`) — never under
+   `product-src/<slug>` (which the deploy git-resets) nor anywhere in the container's
+   writable layer.
+2. **`storage_key` is stored relative** to the storage root, so references keep
+   resolving even if the absolute mount path changes (host migration / new
+   `data_root`).
+3. **The deploy must never wipe the data dir or `files/`.** It is an invariant today
+   (the deploy only touches `plugins/`, `product-src/`, `runtime/whatsapp-bridge`,
+   `.env`, `SOUL.md`, `auth.json`); add `mkdir -p "$DATA_DIR/files"` and keep `files/`
+   out of any `rm -rf`. The `StorageBackend` also creates the dir on first write.
+
+Backups (ops) must cover **both** `$DATA_DIR/files` **and** the Postgres database
+together, since the file rows / extractions reference the stored copies; dedup by
+content hash + relative `storage_key` keeps the pair consistent after a restore.
 - **`SourceAdapter`** (`list(path)`, `fetch(entry)`) — accommodates each developer's
   different folder structure without touching the rest. Implementations:
   `HttpFolderAdapter` (generic), **`FileHubAdapter`** (EBM — `# TODO`: consume the

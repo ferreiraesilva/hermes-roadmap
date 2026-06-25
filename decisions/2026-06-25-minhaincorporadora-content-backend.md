@@ -17,9 +17,13 @@ structure, and each developer (EBM is the reference) stores content differently.
 Build the content backend as an evolution of the existing plugin, with these locked
 choices:
 
-1. **Storage in-container.** Originals are kept on the container filesystem
-   (`/opt/data/files/...`), behind a `StorageBackend` abstraction; external storage
-   (S3 / Supabase Storage) is deferred. Backups are an ops task.
+1. **Storage in-container, on the persistent volume.** Originals are kept under
+   `/opt/data/files/...`, which is a **host bind mount** (`${HERMES_DATA_DIR}:/opt/data`),
+   so they **survive container recreation and any redeploy** (the deploy git-resets
+   only `product-src/`, never `files/`). `storage_key` is stored relative to the
+   storage root so references survive a host/path change. External storage (S3 /
+   Supabase Storage) is deferred behind the same `StorageBackend` abstraction. Ops
+   backups must cover `$DATA_DIR/files` and the database together.
 2. **AI via OpenRouter, per-format specialization.** A `ModelRouter` selects the best
    model per media type and task (images/floor plans → vision/OCR; pdf/doc/ppt →
    native parse + text model; xlsx/csv → native parse; video → ASR + keyframe
